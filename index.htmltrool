@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Merge Troll – Jogo de Fusão</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── TELA DE LOADING ────────────────────────────────────────── -->
+<div id="loading-screen" class="screen active">
+  <div class="sky-bg">
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+  </div>
+  <div class="loading-troll">
+    <div class="troll-face-big">
+      <div class="troll-hair-big"></div>
+      <div class="troll-head-big">
+        <div class="troll-eye tl"></div>
+        <div class="troll-eye tr"></div>
+        <div class="troll-nose-big"></div>
+        <div class="troll-beard-big"></div>
+      </div>
+    </div>
+  </div>
+  <div class="loading-bar-wrap">
+    <div class="loading-bar-bg">
+      <div class="loading-bar-fill" id="loading-bar"></div>
+    </div>
+  </div>
+  <div class="forest-bg"></div>
+  <div class="fairy-banner">
+    <div class="fairy-char"></div>
+    <div class="stars-row">⭐⭐⭐</div>
+  </div>
+</div>
+
+<!-- ── TELA DE MENU ───────────────────────────────────────────── -->
+<div id="menu-screen" class="screen">
+  <div class="sky-bg">
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+  </div>
+  <div class="menu-troll">🧌</div>
+  <h1 class="game-title">Merge<br>Troll</h1>
+  <p class="subtitle">Combine números e vença o Troll!</p>
+  <button class="btn-play" id="btn-play">▶ Jogar</button>
+  <div class="menu-footer">
+    <span>⭐ Recorde: <span id="best-score">0</span></span>
+  </div>
+</div>
+
+<!-- ── TELA DE JOGO ───────────────────────────────────────────── -->
+<div id="game-screen" class="screen">
+
+  <!-- HUD -->
+  <div class="hud">
+    <div class="hud-item stars-hud">⭐ <span id="hud-stars">0</span></div>
+    <div class="hud-item level-hud">Nível <span id="hud-level">1</span></div>
+    <button class="btn-pause" id="btn-pause">⏸</button>
+  </div>
+
+  <!-- Troll segurando o tabuleiro -->
+  <div class="troll-container">
+    <div class="troll-sprite">
+      <!-- Cabeça do Troll (CSS art) -->
+      <div class="troll-head-game">
+        <div class="t-hair"></div>
+        <div class="t-face">
+          <div class="t-eye t-eye-l"></div>
+          <div class="t-eye t-eye-r"></div>
+          <div class="t-nose"></div>
+          <div class="t-mouth"></div>
+          <div class="t-cheek t-cheek-l"></div>
+          <div class="t-cheek t-cheek-r"></div>
+        </div>
+        <div class="t-hands-top">
+          <div class="t-hand t-hand-l"></div>
+          <div class="t-hand t-hand-r"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabuleiro -->
+    <div class="board-frame">
+      <div class="board" id="board"></div>
+    </div>
+
+    <!-- Mão inferior -->
+    <div class="t-hands-bot">
+      <div class="t-hand t-hand-bl"></div>
+      <div class="t-hand t-hand-br"></div>
+    </div>
+  </div>
+
+  <!-- Área de lançamento -->
+  <div class="launch-area">
+    <!-- Estilingue + preview do próximo -->
+    <div class="slingshot-wrap">
+      <div class="slingshot" id="slingshot">
+        <div class="sling-fork"></div>
+        <div class="sling-band-l" id="band-l"></div>
+        <div class="sling-band-r" id="band-r"></div>
+        <div class="sling-ball" id="sling-ball">
+          <span id="sling-val">2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controles centrais -->
+    <div class="controls-center">
+      <button class="btn-undo" id="btn-undo" title="Desfazer">↩</button>
+      <div class="next-ball-wrap">
+        <div class="next-ball">
+          <span id="next-val">2</span>
+        </div>
+        <div class="next-label">próxima</div>
+      </div>
+      <button class="btn-swap" id="btn-swap" title="Trocar">🔄</button>
+    </div>
+  </div>
+
+  <!-- Indicador de coluna (clique nas colunas) -->
+  <div class="column-indicators" id="col-indicators"></div>
+
+</div>
+
+<!-- ── PAUSA ─────────────────────────────────────────────────── -->
+<div id="pause-overlay" class="overlay hidden">
+  <div class="overlay-box">
+    <h2>⏸ Pausado</h2>
+    <button class="btn-resume" id="btn-resume">▶ Continuar</button>
+    <button class="btn-menu"   id="btn-menu-pause">🏠 Menu</button>
+  </div>
+</div>
+
+<!-- ── GAME OVER ──────────────────────────────────────────────── -->
+<div id="gameover-overlay" class="overlay hidden">
+  <div class="overlay-box">
+    <div class="go-troll">😤</div>
+    <h2>Fim de Jogo!</h2>
+    <p>Pontuação: <strong id="go-score">0</strong> ⭐</p>
+    <p>Recorde: <strong id="go-best">0</strong> ⭐</p>
+    <button class="btn-play btn-restart" id="btn-restart">🔄 Jogar Novamente</button>
+    <button class="btn-menu" id="btn-menu-go">🏠 Menu</button>
+  </div>
+</div>
+
+<!-- ── WIN ────────────────────────────────────────────────────── -->
+<div id="win-overlay" class="overlay hidden">
+  <div class="overlay-box win-box">
+    <div class="win-fairy">🧚</div>
+    <h2>Incrível! 🎉</h2>
+    <p>Você chegou ao <strong id="win-tile">2048</strong>!</p>
+    <p>Pontuação: <strong id="win-score">0</strong> ⭐</p>
+    <button class="btn-play btn-restart" id="btn-next">▶ Continuar</button>
+    <button class="btn-menu" id="btn-menu-win">🏠 Menu</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
